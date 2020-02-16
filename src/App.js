@@ -11,7 +11,8 @@ const items =[
     "category":{
       "id": 1,
       "name": "travel",
-      "type": "outcome"
+      "type": "outcome",
+      "iconName":"ios-plane"
     }
   },
   {
@@ -22,7 +23,8 @@ const items =[
     "category":{
       "id": 2,
       "name": "travel",
-      "type": "outcome"
+      "type": "outcome",
+      "iconName":"ios-plane"
     }
   }
 
