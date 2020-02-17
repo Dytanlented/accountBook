@@ -57,6 +57,7 @@ function App() {
       <MonthPicker
         year={2020}
         month={2}
+        onChange={(year,month)=>{}}
       />
     </div>
   );
