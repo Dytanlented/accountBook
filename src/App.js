@@ -3,6 +3,7 @@ import "./bootstrap.css";
 import './App.css';
 import PriceList from "./components/PriceList";
 import ViewTab from "./components/ViewTab";
+import TotalPrice from "./components/TotalPrice";
 
 import {LIST_VIEW, CHART_VIEW} from './utility'
 
@@ -42,11 +43,15 @@ function App() {
         activeTab={LIST_VIEW}
         onTabChange={(view)=>{console.log(view)}}
       />
-    <PriceList 
-      items={items}
-      onModifyItem={(item)=>{alert(item.id)}}
-      onDeleteItem={(item)=>{alert(item.id)}}
-    />
+      <TotalPrice
+        income={1000}
+        outcome={2000}
+      />
+      <PriceList 
+        items={items}
+        onModifyItem={(item)=>{alert(item.id)}}
+        onDeleteItem={(item)=>{alert(item.id)}}
+      />
     </div>
   );
 }
