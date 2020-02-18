@@ -5,6 +5,7 @@ import PriceList from "./components/PriceList";
 import ViewTab from "./components/ViewTab";
 import TotalPrice from "./components/TotalPrice";
 import MonthPicker from "./components/MonthPicker"
+import Home from "./containers/Home";
 
 
 import {LIST_VIEW, CHART_VIEW} from './utility'
