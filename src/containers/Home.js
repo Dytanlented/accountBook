@@ -56,6 +56,21 @@ class Home extends Component {
 			tabView: LIST_VIEW
 		}
 	}
+	changeView = ()=>{
+
+	}
+	changeDate = ()=>{
+
+	}
+	modifyItem = ()=>{
+
+	}
+	createItem = ()=>{
+
+	}
+	deleteItem =()=>{
+
+	}
 
 	render() {
 		const {items,currentDate,tabView} = this.state
@@ -82,7 +97,7 @@ class Home extends Component {
 							<MonthPicker
 				        year={currentDate.year}
 				        month={currentDate.month}
-				        onChange={(year,month)=>{}}
+				        onChange={this.changeDate}
 					    />
 						</div>
 						<div className="">
@@ -96,13 +111,13 @@ class Home extends Component {
 				<div className="content-area py-3 px-3">
 					<ViewTab 
 			      activeTab={tabView}
-		        onTabChange={(view)=>{console.log(view)}}
+		        onTabChange={this.changeView}
 			    />
-			    <CreateBtn onClick={()=>{}}/>
+			    <CreateBtn onClick={this.createItem}/>
 			    <PriceList 
 		        items={itemsWithCategory}
-		        onModifyItem={(item)=>{alert(item.id)}}
-		        onDeleteItem={(item)=>{alert(item.id)}}
+		        onModifyItem={this.modifyItem}
+		        onDeleteItem={this.deleteItem}
 			    />
 				</div>
 			</React.Fragment>
