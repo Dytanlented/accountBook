@@ -5,38 +5,66 @@ import ViewTab from "../components/ViewTab";
 import TotalPrice from "../components/TotalPrice";
 import CreateBtn from "../components/CreateBtn";
 import MonthPicker from "../components/MonthPicker";
-import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME} from '../utility';
+import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME,parseToYearAndMonth} from '../utility';
+
+const categories = {
+	"1":{
+		"id": 1,
+      "name": "travel",
+      "type": "outcome",
+      "iconName":"ios-plane",
+	},
+	"2":{
+		"id": 2,
+		"name": "financing",
+		"type":"income",
+		"iconName": "logo-yen",
+	}
+}
 
 const items =[
   {
     "id":1,
     "title": "travel to Canada",
-    "price": 2000,
+    "price": 1000,
     "date": "2020-02-14",
-    "category":{
-      "id": 1,
-      "name": "travel",
-      "type": "outcome",
-      "iconName":"ios-plane"
-    }
+    "cid":1
   },
   {
     "id":2,
     "title": "travel to America",
-    "price": 2000,
+    "price": 800,
     "date": "2020-02-01",
-    "category":{
-      "id": 2,
-      "name": "travel",
-      "type": "outcome",
-      "iconName":"ios-plane"
-    }
+    "cid":1
+  },
+  {
+  	"id":3,
+  	"title": "salary",
+  	"price": 5000,
+  	"date": "2020-02-20",
+  	"cid":2
   }
 
 ]
 
 class Home extends Component {
+	constructor(props){
+		super(props)
+		this.state={
+			items,
+			currentDate : parseToYearAndMonth(),
+			tabView: LIST_VIEW
+		}
+	}
+
 	render() {
+		const {items,currentDate,tabView} = this.state
+		const itemsWithCategory = items.map(item=>{
+			item.category = categories[item.cid]
+			return item
+		})
+
+
 		let totalIncome = 0;
 		let totalOutcome = 0;
 		items.forEach(item=>{
@@ -52,8 +80,8 @@ class Home extends Component {
 					<div className="row">
 						<div className="col">
 							<MonthPicker
-				        year={2020}
-				        month={2}
+				        year={currentDate.year}
+				        month={currentDate.month}
 				        onChange={(year,month)=>{}}
 					    />
 						</div>
@@ -67,12 +95,12 @@ class Home extends Component {
 				</header>
 				<div className="content-area py-3 px-3">
 					<ViewTab 
-			      activeTab={LIST_VIEW}
+			      activeTab={tabView}
 		        onTabChange={(view)=>{console.log(view)}}
 			    />
 			    <CreateBtn onClick={()=>{}}/>
 			    <PriceList 
-		        items={items}
+		        items={itemsWithCategory}
 		        onModifyItem={(item)=>{alert(item.id)}}
 		        onDeleteItem={(item)=>{alert(item.id)}}
 			    />
