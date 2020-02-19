@@ -1,7 +1,9 @@
 import React,{Component} from 'react';
+import "../bootstrap.css";
 import PriceList from "../components/PriceList";
 import ViewTab from "../components/ViewTab";
 import TotalPrice from "../components/TotalPrice";
+import CreateBtn from "../components/CreateBtn";
 import MonthPicker from "../components/MonthPicker";
 import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME} from '../utility';
 
@@ -47,8 +49,34 @@ class Home extends Component {
 		return(
 			<React.Fragment>
 				<header className="App-header" >
-					
+					<div className="row">
+						<div className="col">
+							<MonthPicker
+				        year={2020}
+				        month={2}
+				        onChange={(year,month)=>{}}
+					    />
+						</div>
+						<div className="">
+							<TotalPrice
+		        	income={totalIncome}
+			        outcome={totalOutcome}
+				    />
+						</div>
+					</div>    
 				</header>
+				<div className="content-area py-3 px-3">
+					<ViewTab 
+			      activeTab={LIST_VIEW}
+		        onTabChange={(view)=>{console.log(view)}}
+			    />
+			    <CreateBtn onClick={()=>{}}/>
+			    <PriceList 
+		        items={items}
+		        onModifyItem={(item)=>{alert(item.id)}}
+		        onDeleteItem={(item)=>{alert(item.id)}}
+			    />
+				</div>
 			</React.Fragment>
 		)
 	}
