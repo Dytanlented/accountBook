@@ -20,13 +20,13 @@ const PriceList = ({items,onModifyItem,onDeleteItem})=>{
 								icon={item.category.iconName}
 							/>
 						</span>
-						<span className="col-4">
+						<span className="col-3">
 							{item.title}
 						</span>
 						<span className="col-1">
 							{(item.category.type==="outcome")? '-':'+'}{item.price}$
 						</span>
-						<span className="col-3">{item.category.date}</span>
+						<span className="col-3">{item.date}</span>
 						<a className="col-1" 
 							onClick={()=>{onModifyItem(item)}}
 						>

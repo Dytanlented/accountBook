@@ -5,7 +5,7 @@ import ViewTab from "../components/ViewTab";
 import TotalPrice from "../components/TotalPrice";
 import CreateBtn from "../components/CreateBtn";
 import MonthPicker from "../components/MonthPicker";
-import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME,parseToYearAndMonth} from '../utility';
+import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME,parseToYearAndMonth,padLeft} from '../utility';
 
 const categories = {
 	"1":{
@@ -27,7 +27,7 @@ const items =[
     "id":1,
     "title": "travel to Canada",
     "price": 1000,
-    "date": "2020-02-14",
+    "date": "2020-01-14",
     "cid":1
   },
   {
@@ -47,6 +47,14 @@ const items =[
 
 ]
 
+const newItem = {
+	"id":4,
+	"title":"new item",
+	"price":200,
+	"date":"2020-02-15",
+	"cid":1
+}
+
 class Home extends Component {
 	constructor(props){
 		super(props)
@@ -56,20 +64,38 @@ class Home extends Component {
 			tabView: LIST_VIEW
 		}
 	}
-	changeView = ()=>{
-
+	changeView = (view)=>{
+		this.setState({
+			tabView: view,
+		})
 	}
-	changeDate = ()=>{
-
+	changeDate = (year,month)=>{
+		this.setState({
+			currentDate:{year,month}
+		})
 	}
-	modifyItem = ()=>{
-
+	modifyItem = (modifiedItem)=>{
+		const modifiedItems = this.state.items.map(item=>{
+			if(item.id===modifiedItem.id){
+				return 	{...item,title:"new title"}
+			}else{
+				return item
+			}
+		})
+		this.setState({
+			items:modifiedItems
+		})
 	}
 	createItem = ()=>{
-
+		this.setState({
+			items:[newItem,...this.state.items]
+		})
 	}
-	deleteItem =()=>{
-
+	deleteItem =(deletedItem)=>{
+		const filteredItems = this.state.items.filter(item=>item.id!=deletedItem.id)
+		this.setState({
+			items:filteredItems
+		})
 	}
 
 	render() {
@@ -77,6 +103,8 @@ class Home extends Component {
 		const itemsWithCategory = items.map(item=>{
 			item.category = categories[item.cid]
 			return item
+		}).filter(item=>{
+			return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
 		})
 
 
@@ -114,11 +142,16 @@ class Home extends Component {
 		        onTabChange={this.changeView}
 			    />
 			    <CreateBtn onClick={this.createItem}/>
-			    <PriceList 
-		        items={itemsWithCategory}
-		        onModifyItem={this.modifyItem}
-		        onDeleteItem={this.deleteItem}
-			    />
+			    {tabView===LIST_VIEW&&
+			    	<PriceList 
+		        	items={itemsWithCategory}
+		        	onModifyItem={this.modifyItem}
+		        	onDeleteItem={this.deleteItem}
+			    	/>
+			    }
+			    {tabView===CHART_VIEW&&
+			    	<h1>This is chart view</h1>
+			    }
 				</div>
 			</React.Fragment>
 		)
