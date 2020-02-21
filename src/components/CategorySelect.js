@@ -26,16 +26,20 @@ class CategorySelect extends React.Component {
 				<div className="row">
 					{
 						categories.map((category,index)=>{
+							const iconColor = (selectedCategoryId === category.id) ? '#fff':'#555'
+							const backColor = (selectedCategoryId === category.id) ? '#347eff':'#efefef'
 							const activeClassName = (selectedCategoryId === category.id) ? 'category-item col-3 active' : 'category-item col-3'
 							return (
-								<div className={activeClassName} key={index}
+								<div className={activeClassName} key={index} style={{textAlign:"center"}}
 								onClick ={(event)=>{this.selectedCategory(event,category)}}>
 									<Ionicon
 										className="rounded-circle"
-										fontsize="50px"
-										color="#555"
+										style={{backgroundColor:backColor,padding:'5px'}}
+										fontSize="50px"
+										color={iconColor}
 										icon={category.iconName}
 									/>
+									<p>{category.name}</p>
 								</div>
 							)
 						})
