@@ -8,7 +8,8 @@ import MonthPicker from "../components/MonthPicker";
 import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME,parseToYearAndMonth,padLeft} from '../utility';
 import { Tabs,Tab } from "../components/Tabs"
 import Ionicon from 'react-ionicons'
-import { AppContext } from '../App'
+
+import withContext from '../WithContext'
 
 const categories = {
 	"1":{
@@ -103,6 +104,8 @@ class Home extends Component {
 	}
 
 	render() {
+		const { data } = this.props
+
 		const {items,currentDate,tabView} = this.state
 		const itemsWithCategory = items.map(item=>{
 			item.category = categories[item.cid]
@@ -122,73 +125,66 @@ class Home extends Component {
 			}
 		})
 		return(
-			<AppContext.Consumer>
-				{ ({ state }) =>{
-					console.log(state)
-					return(
-						<React.Fragment>
-							<header className="App-header" >
-								<div className="row">
-									<div className="col">
-										<MonthPicker
-							        year={currentDate.year}
-							        month={currentDate.month}
-							        onChange={this.changeDate}
-								    />
-									</div>
-									<div className="">
-										<TotalPrice
-					        	income={totalIncome}
-						        outcome={totalOutcome}
-							    />
-									</div>
-								</div>    
-							</header>
-							<div className="content-area py-3 px-3">
-								<Tabs activeIndex={0} onTabChange={this.changeView}>
-								 <Tab>
-									<Ionicon
-										className="rounded-circle"
-										fontSize="20px"
-										color={'#007bff'}
-										icon='ios-paper'
-									/>
-									List mode
-								 </Tab>
-								 <Tab>
-									<Ionicon
-										className="rounded-circle"
-										fontSize="20px"
-										color={'#007bff'}
-										icon='ios-pie'
-									/>
-									Chart mode
-								 </Tab>
-								</Tabs>
-								<ViewTab 
-						      activeTab={tabView}
-					        onTabChange={this.changeView}
-						    />
-						    <CreateBtn onClick={this.createItem}/>
-						    {tabView===LIST_VIEW&&
-						    	<PriceList 
-					        	items={itemsWithCategory}
-					        	onModifyItem={this.modifyItem}
-					        	onDeleteItem={this.deleteItem}
-						    	/>
-						    }
-						    {tabView===CHART_VIEW&&
-						    	<h1>This is chart view</h1>
-						    }
-							</div>
-						</React.Fragment>
-					)
-				}}
-			</AppContext.Consumer>
+			<React.Fragment>
+				<header className="App-header" >
+					<div className="row">
+						<div className="col">
+							<MonthPicker
+				        year={currentDate.year}
+				        month={currentDate.month}
+				        onChange={this.changeDate}
+					    />
+						</div>
+						<div className="">
+							<TotalPrice
+		        	income={totalIncome}
+			        outcome={totalOutcome}
+				    />
+						</div>
+					</div>    
+				</header>
+				<div className="content-area py-3 px-3">
+					<Tabs activeIndex={0} onTabChange={this.changeView}>
+					 <Tab>
+						<Ionicon
+							className="rounded-circle"
+							fontSize="20px"
+							color={'#007bff'}
+							icon='ios-paper'
+						/>
+						List mode
+					 </Tab>
+					 <Tab>
+						<Ionicon
+							className="rounded-circle"
+							fontSize="20px"
+							color={'#007bff'}
+							icon='ios-pie'
+						/>
+						Chart mode
+					 </Tab>
+					</Tabs>
+					<ViewTab 
+			      activeTab={tabView}
+		        onTabChange={this.changeView}
+			    />
+			    <CreateBtn onClick={this.createItem}/>
+			    {tabView===LIST_VIEW&&
+			    	<PriceList 
+		        	items={itemsWithCategory}
+		        	onModifyItem={this.modifyItem}
+		        	onDeleteItem={this.deleteItem}
+			    	/>
+			    }
+			    {tabView===CHART_VIEW&&
+			    	<h1>This is chart view</h1>
+			    }
+				</div>
+			</React.Fragment>
 		)
 	}
 }
 
-export default Home
+export default withContext(Home)
 
 
