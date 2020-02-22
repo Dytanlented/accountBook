@@ -8,63 +8,55 @@ import MonthPicker from "../components/MonthPicker";
 import {LIST_VIEW, CHART_VIEW, TYPE_INCOME,TYPE_OUTCOME,parseToYearAndMonth,padLeft} from '../utility';
 import { Tabs,Tab } from "../components/Tabs"
 import Ionicon from 'react-ionicons'
-
+import { withRouter } from 'react-router-dom'
 import withContext from '../WithContext'
 
-const categories = {
-	"1":{
-		"id": 1,
-      "name": "travel",
-      "type": "outcome",
-      "iconName":"ios-plane",
-	},
-	"2":{
-		"id": 2,
-		"name": "financing",
-		"type":"income",
-		"iconName": "logo-yen",
-	}
-}
+// const categories = {
+// 	"1":{
+// 		"id": 1,
+//       "name": "travel",
+//       "type": "outcome",
+//       "iconName":"ios-plane",
+// 	},
+// 	"2":{
+// 		"id": 2,
+// 		"name": "financing",
+// 		"type":"income",
+// 		"iconName": "logo-yen",
+// 	}
+// }
 
-const items =[
-  {
-    "id":1,
-    "title": "travel to Canada",
-    "price": 1000,
-    "date": "2020-01-14",
-    "cid":1
-  },
-  {
-    "id":2,
-    "title": "travel to America",
-    "price": 800,
-    "date": "2020-02-01",
-    "cid":1
-  },
-  {
-  	"id":3,
-  	"title": "salary",
-  	"price": 5000,
-  	"date": "2020-02-20",
-  	"cid":2
-  }
+// const items =[
+//   {
+//     "id":1,
+//     "title": "travel to Canada",
+//     "price": 1000,
+//     "date": "2020-01-14",
+//     "cid":1
+//   },
+//   {
+//     "id":2,
+//     "title": "travel to America",
+//     "price": 800,
+//     "date": "2020-02-01",
+//     "cid":1
+//   },
+//   {
+//   	"id":3,
+//   	"title": "salary",
+//   	"price": 5000,
+//   	"date": "2020-02-20",
+//   	"cid":2
+//   }
 
-]
+// ]
 
-const newItem = {
-	"id":4,
-	"title":"new item",
-	"price":200,
-	"date":"2020-02-15",
-	"cid":1
-}
 const tabsText = [LIST_VIEW,CHART_VIEW]
 
 class Home extends Component {
 	constructor(props){
 		super(props)
 		this.state={
-			items,
 			currentDate : parseToYearAndMonth(),
 			tabView: tabsText[0]
 		}
@@ -79,37 +71,24 @@ class Home extends Component {
 			currentDate:{year,month}
 		})
 	}
-	modifyItem = (modifiedItem)=>{
-		const modifiedItems = this.state.items.map(item=>{
-			if(item.id===modifiedItem.id){
-				return 	{...item,title:"new title"}
-			}else{
-				return item
-			}
-		})
-		this.setState({
-			items:modifiedItems
-		})
+	modifyItem = (item)=>{
+		this.props.history.push(`/edit/${item.id}`)
 	}
 	createItem = ()=>{
-		this.setState({
-			items:[newItem,...this.state.items]
-		})
+		this.props.history.push('./create')
 	}
-	deleteItem =(deletedItem)=>{
-		const filteredItems = this.state.items.filter(item=>item.id!=deletedItem.id)
-		this.setState({
-			items:filteredItems
-		})
+	deleteItem =(item)=>{
+		this.props.actions.deleteItem(item)
+		console.log("homejs"+item.id)
 	}
 
 	render() {
 		const { data } = this.props
-
-		const {items,currentDate,tabView} = this.state
-		const itemsWithCategory = items.map(item=>{
-			item.category = categories[item.cid]
-			return item
+		const {items,categories} = data
+		const {currentDate,tabView} = this.state
+		const itemsWithCategory = Object.keys(items).map(id=>{
+			items[id].category = categories[items[id].cid]
+			return items[id]
 		}).filter(item=>{
 			return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
 		})
@@ -117,7 +96,7 @@ class Home extends Component {
 
 		let totalIncome = 0;
 		let totalOutcome = 0;
-		items.forEach(item=>{
+		itemsWithCategory.forEach(item=>{
 			if(item.category.type===TYPE_OUTCOME){
 				totalOutcome += item.price
 			}else{
@@ -185,6 +164,6 @@ class Home extends Component {
 	}
 }
 
-export default withContext(Home)
+export default withRouter(withContext(Home))
 
 

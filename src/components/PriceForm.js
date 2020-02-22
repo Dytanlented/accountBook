@@ -72,7 +72,7 @@ class PriceForm extends Component {
 					/>
 				</div>
 				<button type="submit" className="btn btn-primary mr-3">Submit</button>
-				<button className="btn btn-secondary">Cancel</button>
+				<button className="btn btn-secondary" onClick={this.props.onFormCancel}>Cancel</button>
 				{ !this.state.validatePass &&
 					<div className="alert alert-danger mt-5" role="alert">
 						{this.state.errorMessage}
