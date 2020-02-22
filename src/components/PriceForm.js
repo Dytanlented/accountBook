@@ -4,7 +4,9 @@ import { isValidDate } from '../utility'
 
 
 class PriceForm extends Component {
-	
+	static defaultProps = {
+    item: {}
+  }
 
 	state = {
 		validatePass:true,
