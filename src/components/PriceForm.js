@@ -50,6 +50,7 @@ class PriceForm extends Component {
 		event.preventDefault()
 	}
 	render(){
+		const { title, price, date } = this.props.item
 		return(
 			<form onSubmit={(event)=>{this.submitForm(event)}} noValidate>
 				<div className="form-group">
@@ -58,6 +59,7 @@ class PriceForm extends Component {
 						type="text" className="form-control"
 						id="title" placeholder="Please enter title"
 						ref={(input)=>{this.titleInput = input}}
+						defaultValue={title}
 					/>
 				</div>
 
@@ -67,6 +69,7 @@ class PriceForm extends Component {
 						type="number" className="form-control"
 						id="price" placeholder="Please enter price"
 						ref={(input)=>{this.priceInput = input}}
+						defaultValue={price}
 					/>
 				</div>
 
@@ -76,6 +79,7 @@ class PriceForm extends Component {
 						type="date" className="form-control"
 						id="date"
 						ref={(input)=>{this.dateInput = input}}
+						defaultValue={date}
 					/>
 				</div>
 				<button type="submit" className="btn btn-primary mr-3">Submit</button>
