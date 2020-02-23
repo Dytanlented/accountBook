@@ -12,7 +12,7 @@ const tabsText = [TYPE_OUTCOME,TYPE_INCOME]
 class Create extends React.Component {
 	constructor(props){
 		super(props)
-		this.state={
+		this.state = {	
 			selectedTab:TYPE_OUTCOME,
 			selectedCategory:null
 		}
@@ -26,10 +26,30 @@ class Create extends React.Component {
 	cancelSubmit = ()=>{
 		this.props.history.push('/')
 	}
+	selectCategory = (category)=>{
+		this.setState({
+			selectedCategory: category
+		})
+	}
+	submitForm = (data,isEditMode) =>{
+		if (!this.state.selectedCategory) {
+      this.setState({
+        validationPassed: false
+      })
+      return
+    }
+		if(!isEditMode) {
+			//create
+			this.props.actions.createItem(data,this.state.selectedCategory.id)
+		}else{
+			//edit
+		}
+		this.props.history.push('/')
+	} 
 	render() {
 		const {data} = this.props
 		const {items,categories} = data
-		const {selectedTab} = this.state
+		const {selectedTab,selectedCategory} = this.state
 		const filterCategories = Object.keys(categories)
 		.filter(id=>categories[id].type===selectedTab)
 		.map(id=>categories[id])
@@ -43,9 +63,13 @@ class Create extends React.Component {
 						income
 					</Tab>
 				</Tabs>
-				<CategorySelect categories={filterCategories} onSelectCategory={()=>{}}/>	
+				<CategorySelect 
+					categories={filterCategories} 
+					onSelectCategory={this.selectCategory}
+					selectedCategory={selectedCategory}
+				/>	
 				<PriceForm 
-					onFormSubmit={()=>{}}
+					onFormSubmit={this.submitForm}
 					onFormCancel={this.cancelSubmit}
 				/>
 			</div>

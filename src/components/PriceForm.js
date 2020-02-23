@@ -14,6 +14,8 @@ class PriceForm extends Component {
 	}
 
 	submitForm = (event)=>{
+		const {item,onFormSubmit} = this.props
+		const editMode = !!item.id
 		const price = this.priceInput.value.trim()*1 
 		const date = this.dateInput.value.trim()
 		const title = this.titleInput.value.trim()
@@ -33,6 +35,11 @@ class PriceForm extends Component {
 					validatePass:true,
 					errorMessage:''
 				})
+				if (editMode) {
+	        onFormSubmit({ ...item, title, price, date }, editMode)
+	      } else {
+	        onFormSubmit({ title, price, date }, editMode)
+	      }
 			}
 		}else{
 			this.setState({

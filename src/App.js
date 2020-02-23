@@ -7,7 +7,7 @@ import Home from "./containers/Home";
 import Create from "./containers/Create"
 import PriceForm from "./components/PriceForm";
 import { testItems, testCategories } from './testData'
-import { flattenArr } from './utility'
+import { flattenArr, ID, parseToYearAndMonth } from './utility'
 
 export const AppContext = React.createContext()
 
@@ -25,6 +25,16 @@ class App extends Component{
           items: this.state.items
         })
         console.log(this.state.items)
+      },
+      createItem: (data,categoryId) => {
+        const newId = ID()
+        const parsedDate = parseToYearAndMonth(data.date)
+        data.monthCategory = `${parsedDate.year}-${parsedDate.monnth}`
+        data.timeStamp = new Date(data.date).getTime()
+        const newItem = { ...data,id:newId,cid:categoryId }
+        this.setState({
+          items:{...this.state.items, [newId] : newItem }
+        })
       }
     }
   }
