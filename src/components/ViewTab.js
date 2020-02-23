@@ -15,7 +15,7 @@ const ViewTab = ({activeTab, onTabChange})=>{
 			<a 
 				className={generateLinkClass(activeTab, LIST_VIEW)} 
 				href="#"
-				onClick={(event)=>{event.preventDefault();onTabChange(LIST_VIEW)}}
+				onClick={()=>{onTabChange(0)}}
 			>
 				<Ionicon
 					className="rounded-circle"
@@ -30,7 +30,7 @@ const ViewTab = ({activeTab, onTabChange})=>{
 			<a 
 				className={generateLinkClass(activeTab, CHART_VIEW)} 
 				href="#"
-				onClick={(event)=>{event.preventDefault();onTabChange(CHART_VIEW)}}
+				onClick={(event)=>{onTabChange(1)}}
 			>
 				<Ionicon
 					className="rounded-circle"

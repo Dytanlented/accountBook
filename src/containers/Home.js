@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import "../bootstrap.css";
 import PriceList from "../components/PriceList";
-import ViewTab from "../components/ViewTab";
+// import ViewTab from "../components/ViewTab";
 import TotalPrice from "../components/TotalPrice";
 import CreateBtn from "../components/CreateBtn";
 import MonthPicker from "../components/MonthPicker";
@@ -143,10 +143,6 @@ class Home extends Component {
 						Chart mode
 					 </Tab>
 					</Tabs>
-					<ViewTab 
-			      activeTab={tabView}
-		        onTabChange={this.changeView}
-			    />
 			    <CreateBtn onClick={this.createItem}/>
 			    {tabView===LIST_VIEW&&
 			    	<PriceList 
