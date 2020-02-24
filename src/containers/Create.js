@@ -19,6 +19,16 @@ class Create extends React.Component {
 			selectedCategory:(id&&items[id])? categories[items[id].cid] : null
 		}
 	}
+	componentDidMount(){
+		const { id } = this.props.match.params
+		this.props.actions.getEditData(id).then(data=>{
+			const { editItem, categories } = data
+			this.setState({
+				selectedTab:(id&&editItem)? categories[editItem.cid].type:TYPE_OUTCOME,
+				selectedCategory:(id&&editItem)? categories[editItem.cid] : null
+			})
+		})
+	}
 	
 	tabChange = (index)=>{
 		this.setState({
@@ -42,12 +52,16 @@ class Create extends React.Component {
     }
 		if(!isEditMode) {
 			//create
-			this.props.actions.createItem(data,this.state.selectedCategory.id)
+			this.props.actions.createItem(data,this.state.selectedCategory.id).then(()=>{
+				this.props.history.push('/')
+			})
 		}else{
 			//edit
-			this.props.actions.updateItem(data,this.state.selectedCategory.id)
+			this.props.actions.updateItem(data,this.state.selectedCategory.id).then(()=>{
+				this.props.history.push('/')
+			})
 		}
-		this.props.history.push('/')
+		
 	} 
 	render() {
 		const {data} = this.props
