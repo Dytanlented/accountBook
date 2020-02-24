@@ -6,25 +6,48 @@ import { BrowserRouter as Router , Route, Link} from "react-router-dom"
 import Home from "./containers/Home";
 import Create from "./containers/Create"
 import PriceForm from "./components/PriceForm";
-import { testItems, testCategories } from './testData'
-import { flattenArr, ID, parseToYearAndMonth } from './utility'
 
+import { flattenArr, ID, parseToYearAndMonth } from './utility'
+import axios from 'axios'
 export const AppContext = React.createContext()
 
 class App extends Component{
   constructor(props){
     super(props)
     this.state ={
-      items:flattenArr(testItems),
-      categories: flattenArr(testCategories)
+      items:{},
+      categories: {},
+      currentDate:parseToYearAndMonth(),
     }
     this.actions = {
-      deleteItem:(item)=>{
-        delete this.state.items[item.id]
-        this.setState({
-          items: this.state.items
+      getInitialData:()=>{
+        const { currentDate } = this.state
+        const getURLWithData = `items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timeStamp&_order=desc`
+        const promiseArr = [axios.get('/categories'),axios.get(getURLWithData)]
+        Promise.all(promiseArr).then(arr=>{
+          const [categories,items] = arr
+          this.setState({
+            items:flattenArr(items.data),
+            categories:flattenArr(categories.data)
+          })
         })
-        console.log(this.state.items)
+      },
+      selectNewMonth: (year,month)=>{
+        const getURLWithData = `items?monthCategory=${year}-${month}&_sort=timeStamp&_order=desc`
+        axios.get(getURLWithData).then(items=>{
+          this.setState({
+            items:flattenArr(items.data),
+            currentDate:{ year, month }
+          })
+        })
+      },
+      deleteItem:(item)=>{
+        axios.delete(`/items/${item.id}`).then(()=>{
+          delete this.state.items[item.id]
+          this.setState({
+            items: this.state.items
+          })
+        })
       },
       createItem: (data,categoryId) => {
         const newId = ID()

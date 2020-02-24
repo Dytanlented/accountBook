@@ -57,9 +57,11 @@ class Home extends Component {
 	constructor(props){
 		super(props)
 		this.state={
-			currentDate : parseToYearAndMonth(),
 			tabView: tabsText[0]
 		}
+	}
+	componentDidMount() {
+		this.props.actions.getInitialData()
 	}
 	changeView = (index)=>{
 		this.setState({
@@ -67,9 +69,7 @@ class Home extends Component {
 		})
 	}
 	changeDate = (year,month)=>{
-		this.setState({
-			currentDate:{year,month}
-		})
+		this.props.actions.selectNewMonth(year,month)
 	}
 	modifyItem = (item)=>{
 		this.props.history.push(`/edit/${item.id}`)
@@ -84,16 +84,12 @@ class Home extends Component {
 
 	render() {
 		const { data } = this.props
-		const {items,categories} = data
-		const {currentDate,tabView} = this.state
+		const {items,categories,currentDate} = data
+		const {tabView} = this.state
 		const itemsWithCategory = Object.keys(items).map(id=>{
 			items[id].category = categories[items[id].cid]
 			return items[id]
-		}).filter(item=>{
-			return item.date.includes(`${currentDate.year}-${padLeft(currentDate.month)}`)
 		})
-
-
 		let totalIncome = 0;
 		let totalOutcome = 0;
 		itemsWithCategory.forEach(item=>{
@@ -146,9 +142,9 @@ class Home extends Component {
 			    <CreateBtn onClick={this.createItem}/>
 			    {tabView===LIST_VIEW&&
 			    	<PriceList 
-		        	items={itemsWithCategory}
-		        	onModifyItem={this.modifyItem}
-		        	onDeleteItem={this.deleteItem}
+			        	items={itemsWithCategory}
+			        	onModifyItem={this.modifyItem}
+			        	onDeleteItem={this.deleteItem}
 			    	/>
 			    }
 			    {tabView===CHART_VIEW&&
