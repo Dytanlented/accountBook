@@ -18,36 +18,48 @@ class App extends Component{
       items:{},
       categories: {},
       currentDate:parseToYearAndMonth(),
+      isLoading:false
     }
     this.actions = {
-      getInitialData:()=>{
+      getInitialData: async ()=>{
+        this.setState({
+          isLoading:true
+        })
         const { currentDate } = this.state
         const getURLWithData = `items?monthCategory=${currentDate.year}-${currentDate.month}&_sort=timeStamp&_order=desc`
-        const promiseArr = [axios.get('/categories'),axios.get(getURLWithData)]
-        Promise.all(promiseArr).then(arr=>{
-          const [categories,items] = arr
-          this.setState({
-            items:flattenArr(items.data),
-            categories:flattenArr(categories.data)
-          })
+        const results = await Promise.all([axios.get('/categories'),axios.get(getURLWithData)])
+        const [categories,items] = results
+        this.setState({
+          items:flattenArr(items.data),
+          categories:flattenArr(categories.data),
+          isLoading:false
         })
+        return items
       },
-      selectNewMonth: (year,month)=>{
+      selectNewMonth: async (year,month)=>{
+        this.setState({
+          isLoading:true
+        })
         const getURLWithData = `items?monthCategory=${year}-${month}&_sort=timeStamp&_order=desc`
-        axios.get(getURLWithData).then(items=>{
-          this.setState({
-            items:flattenArr(items.data),
-            currentDate:{ year, month }
-          })
+        const items = await axios.get(getURLWithData)
+        this.setState({
+          items:flattenArr(items.data),
+          currentDate:{ year, month },
+          isLoading:false
         })
+        return items
       },
-      deleteItem:(item)=>{
-        axios.delete(`/items/${item.id}`).then(()=>{
-          delete this.state.items[item.id]
-          this.setState({
-            items: this.state.items
-          })
+      deleteItem: async (item)=>{
+        this.setState({
+          isLoading:true
         })
+        const deleteItem = await axios.delete(`/items/${item.id}`)
+        delete this.state.items[item.id]
+        this.setState({
+          items: this.state.items,
+          isLoading:false
+        })
+        return deleteItem
       },
       createItem: (data,categoryId) => {
         const newId = ID()
