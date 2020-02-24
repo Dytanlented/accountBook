@@ -36,10 +36,10 @@ class PriceForm extends Component {
 					errorMessage:''
 				})
 				if (editMode) {
-	        onFormSubmit({ ...item, title, price, date }, editMode)
-	      } else {
-	        onFormSubmit({ title, price, date }, editMode)
-	      }
+			        onFormSubmit({ ...item, title, price, date }, editMode)
+			    } else {
+			        onFormSubmit({ title, price, date }, editMode)
+			    }
 			}
 		}else{
 			this.setState({
